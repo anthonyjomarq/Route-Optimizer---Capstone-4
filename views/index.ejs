@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&libraries=places&v=weekly"
+      defer
+    ></script>
+  </head>
+  <body>
+    <header>
+      <h1>Delivery Route Optimizer</h1>
+    </header>
+
+    <main>
+      <section class="form-container">
+        <h2>Enter Delivery Locations</h2>
+        <form action="/route" method="POST">
+          <div class="form-group">
+            <label for="origin">Starting Point:</label>
+            <input
+              type="text"
+              id="origin"
+              name="origin"
+              placeholder="Enter starting address"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="destination1">Destination 1:</label>
+            <input
+              type="text"
+              id="destination1"
+              name="destinations[]"
+              placeholder="Enter destination address"
+              required
+            />
+          </div>
+
+          <div id="destinations-container">
+            <!-- Additional destinations will be added here dynamically -->
+          </div>
+
+          <button type="button" id="add-destination">+ Add Destination</button>
+          <button type="submit">Calculate Optimal Route</button>
+        </form>
+      </section>
+
+      <section class="map-container">
+        <div id="map"></div>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        &copy;<%= new Date().getFullYear() %> Anthony Colon. All rights
+        reserved.
+      </p>
+    </footer>
+
+    <script src="/js/formHandler.js"></script>
+    <script src="/js/mapHandler.js"></script>
+  </body>
+</html>

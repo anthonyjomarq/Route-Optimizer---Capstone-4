@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/result.css">
+  <script src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&v=weekly" defer></script>
+</head>
+<body>
+  <header>
+    <h1>Optimized Delivery Route</h1>
+  </header>
+  
+  <main>
+    <section class="map-container">
+      <div id="map"></div>
+    </section>
+    
+    <section class="route-details">
+      <h2>Route Information</h2>
+      <div id="route-summary">
+        <p><strong>From:</strong> <%= routeData.startAddress %></p>
+        <p><strong>To:</strong> <%= routeData.endAddress %></p>
+        <p><strong>Distance:</strong> <%= routeData.distance %></p>
+        <p><strong>Estimated Time:</strong> <%= routeData.duration %></p>
+      </div>
+      
+      <h2>Step-by-Step Directions</h2>
+      <div id="route-directions">
+        <ol>
+          <% routeData.steps.forEach(function(step) { %>
+            <li>
+              <div class="direction-step">
+                <p><%- step.instructions %></p>
+                <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
+              </div>
+            </li>
+          <% }); %>
+        </ol>
+      </div>
+    </section>
+    
+    <a href="/" class="back-button">Calculate Another Route</a>
+  </main>
+  
+  <footer>
+    &copy;<%= new Date().getFullYear() %> Anthony Colon. All rights
+  </footer>
+
+  <script>
+    // Store route data for the map script
+    const routeData = <%- JSON.stringify(routeData) %>;
+    const originAddress = '<%= origin %>';
+    const destinationAddress = '<%= destination %>';
+  </script>
+  <script src="/js/resultMapHandler.js"></script>
+</body>
+</html>

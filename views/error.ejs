@@ -1,0 +1,38 @@
+<!-- views/error.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Error</h1>
+    </header>
+
+    <main>
+      <section class="error-container">
+        <h2>Something went wrong</h2>
+        <p><%= error %></p>
+
+        <% if (typeof stack !== 'undefined' && stack) { %>
+        <div class="error-details">
+          <h3>Technical Details:</h3>
+          <pre><%= stack %></pre>
+        </div>
+        <% } %>
+
+        <a href="/" class="back-button">Back to Home</a>
+      </section>
+    </main>
+
+    <footer>
+      <p>
+        &copy; © <%= new Date().getFullYear() %> Anthony Colon. All rights
+        reserved.
+      </p>
+    </footer>
+  </body>
+</html>
