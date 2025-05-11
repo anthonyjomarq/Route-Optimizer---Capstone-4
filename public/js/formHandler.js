@@ -29,15 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
       removeButton.addEventListener("click", () => {
         destinationsContainer.removeChild(newDestinationDiv);
 
-        // Update the destination numbers
+        // Update the destination numbers after removal
         updateDestinationLabels();
       });
 
-      // Add Google Places autocomplete to the new input
-      // Wait a bit to ensure the DOM is updated
+      // Add Google Places autocomplete to the new input (if available)
       setTimeout(() => {
         const input = document.getElementById(`destination${destinationCount}`);
-        if (input && google && google.maps && google.maps.places) {
+        if (input && window.google && google.maps && google.maps.places) {
           new google.maps.places.Autocomplete(input);
         }
       }, 100);
@@ -46,20 +45,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to update destination labels after removal
   function updateDestinationLabels() {
-    const destinationGroups = document.querySelectorAll(
-      "#destinations-container .form-group"
-    );
-    destinationGroups.forEach((group, index) => {
+    // First destination is always #1 and is not in the container
+    // Start numbering additional destinations from 2
+    const destinationInputs =
+      destinationsContainer.querySelectorAll(".form-group");
+
+    destinationInputs.forEach((group, index) => {
+      const destinationNumber = index + 2; // +2 because we start from Destination 2
+
+      // Update label
       const label = group.querySelector("label");
       if (label) {
-        label.textContent = `Destination ${index + 2}:`;
-        label.setAttribute("for", `destination${index + 2}`);
+        label.textContent = `Destination ${destinationNumber}:`;
+        label.setAttribute("for", `destination${destinationNumber}`);
       }
 
+      // Update input ID (keep the name the same for form submission)
       const input = group.querySelector("input");
       if (input) {
-        input.id = `destination${index + 2}`;
+        input.id = `destination${destinationNumber}`;
       }
     });
+
+    // Update destinationCount to reflect actual number of fields
+    destinationCount = destinationInputs.length + 1; // +1 for the first destination
   }
 });

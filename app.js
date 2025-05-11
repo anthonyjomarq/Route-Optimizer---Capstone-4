@@ -4,6 +4,7 @@ import { fileURLToPath } from "url";
 import config from "./config/default.js";
 import indexRouter from "./routes/index.js";
 import apiRouter from "./routes/api.js";
+import { logger } from "./utils/logger.js";
 
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
@@ -15,6 +16,9 @@ const app = express();
 // Body parser middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+//Logging middleware
+app.use(logger.request);
 
 // Set static folder
 app.use(express.static(path.join(__dirname, "public")));
