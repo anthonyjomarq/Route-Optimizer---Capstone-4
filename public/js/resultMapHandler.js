@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  // Create the map centered on the route start
+  // Create the map
   const map = new google.maps.Map(mapElement, {
     zoom: 12,
     mapTypeControl: false,
@@ -26,32 +26,80 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   });
 
-  // Request directions using the origin and destination addresses
-  directionsService.route(
-    {
-      origin: originAddress,
-      destination: destinationAddress,
-      travelMode: google.maps.TravelMode.DRIVING,
-      optimizeWaypoints: true,
-    },
-    (response, status) => {
-      if (status === "OK") {
-        directionsRenderer.setDirections(response);
+  // Prepare the request based on whether it's single or multi-destination
+  const request = {
+    origin: originAddress,
+    travelMode: google.maps.TravelMode.DRIVING,
+    optimizeWaypoints: true,
+  };
 
-        // Fit the map to the route
-        const bounds = new google.maps.LatLngBounds();
-        const legs = response.routes[0].legs;
+  if (isMultiDestination) {
+    // For multi-destination routes
+    // The last destination is the final destination
+    request.destination = destinationsArray[destinationsArray.length - 1];
 
-        for (let i = 0; i < legs.length; i++) {
-          bounds.extend(legs[i].start_location);
-          bounds.extend(legs[i].end_location);
+    // All other destinations are waypoints
+    if (destinationsArray.length > 1) {
+      request.waypoints = destinationsArray.slice(0, -1).map((destination) => ({
+        location: destination,
+        stopover: true,
+      }));
+    }
+  } else {
+    // For single destination routes
+    request.destination = destinationsArray[0];
+  }
+
+  // Request directions
+  directionsService.route(request, (response, status) => {
+    if (status === "OK") {
+      directionsRenderer.setDirections(response);
+
+      // Fit the map to the route
+      const bounds = new google.maps.LatLngBounds();
+      const legs = response.routes[0].legs;
+
+      for (let i = 0; i < legs.length; i++) {
+        bounds.extend(legs[i].start_location);
+        bounds.extend(legs[i].end_location);
+      }
+
+      map.fitBounds(bounds);
+
+      // Add custom markers for multi-destination routes
+      if (isMultiDestination && legs.length > 1) {
+        // Remove default markers
+        directionsRenderer.setOptions({ suppressMarkers: true });
+
+        // Add custom start marker
+        new google.maps.Marker({
+          position: legs[0].start_location,
+          map: map,
+          label: "S",
+          title: "Start: " + legs[0].start_address,
+        });
+
+        // Add waypoint markers
+        for (let i = 0; i < legs.length - 1; i++) {
+          new google.maps.Marker({
+            position: legs[i].end_location,
+            map: map,
+            label: (i + 1).toString(),
+            title: "Stop " + (i + 1) + ": " + legs[i].end_address,
+          });
         }
 
-        map.fitBounds(bounds);
-      } else {
-        console.error("Directions request failed due to " + status);
-        alert("Could not display directions due to: " + status);
+        // Add end marker
+        new google.maps.Marker({
+          position: legs[legs.length - 1].end_location,
+          map: map,
+          label: "E",
+          title: "End: " + legs[legs.length - 1].end_address,
+        });
       }
+    } else {
+      console.error("Directions request failed due to " + status);
+      alert("Could not display directions due to: " + status);
     }
-  );
+  });
 });

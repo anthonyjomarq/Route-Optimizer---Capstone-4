@@ -19,26 +19,76 @@
     </section>
     
     <section class="route-details">
-      <h2>Route Information</h2>
+      <h2>Route Summary</h2>
       <div id="route-summary">
+      <% if (routeData.startAddress === routeData.endAddress) { %>
+        <p><strong>Circular Route:</strong> Starting and returning to <%= routeData.startAddress %></p>
+      <% } else { %>
         <p><strong>From:</strong> <%= routeData.startAddress %></p>
         <p><strong>To:</strong> <%= routeData.endAddress %></p>
+      <% } %>
+      
+      <% if (isMultiDestination) { %>
+        <p><strong>Total Distance:</strong> <%= routeData.totalDistance %></p>
+        <p><strong>Total Time:</strong> <%= routeData.totalDuration %></p>
+        <p><strong>Stops:</strong> <%= routeData.legs.length - 1 %></p>
+      <% } else { %>
         <p><strong>Distance:</strong> <%= routeData.distance %></p>
         <p><strong>Estimated Time:</strong> <%= routeData.duration %></p>
-      </div>
+      <% } %>
+    </div>
+  
+  <div class="map-legend">
+    <p><strong>Map Markers:</strong> <span class="marker-label">S</span> = Starting Point, 
+      <span class="marker-label">E</span> = End Point</p>
+  </div>
+      
+      <% if (isMultiDestination) { %>
+        <h2>Stop Order</h2>
+        <ol id="stop-order">
+          <li><%= routeData.startAddress %> (Start)</li>
+          <% for (let i = 0; i < routeData.legs.length - 1; i++) { %>
+            <li><%= routeData.legs[i].endAddress %></li>
+          <% } %>
+          <li><%= routeData.endAddress %> (End)</li>
+        </ol>
+      <% } %>
       
       <h2>Step-by-Step Directions</h2>
       <div id="route-directions">
-        <ol>
-          <% routeData.steps.forEach(function(step) { %>
-            <li>
-              <div class="direction-step">
-                <p><%- step.instructions %></p>
-                <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
-              </div>
-            </li>
+        <% if (isMultiDestination) { %>
+          <% routeData.legs.forEach((leg, legIndex) => { %>
+            <div class="leg-container">
+              <h3>
+                Leg <%= legIndex + 1 %>: 
+                <%= leg.startAddress.split(',')[0] %> to 
+                <%= leg.endAddress.split(',')[0] %>
+                (<%= leg.distance %>, <%= leg.duration %>)
+              </h3>
+              <ol>
+                <% leg.steps.forEach((step) => { %>
+                  <li>
+                    <div class="direction-step">
+                      <p><%- step.instructions %></p>
+                      <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
+                    </div>
+                  </li>
+                <% }); %>
+              </ol>
+            </div>
           <% }); %>
-        </ol>
+        <% } else { %>
+          <ol>
+            <% routeData.steps.forEach(function(step) { %>
+              <li>
+                <div class="direction-step">
+                  <p><%- step.instructions %></p>
+                  <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
+                </div>
+              </li>
+            <% }); %>
+          </ol>
+        <% } %>
       </div>
     </section>
     
@@ -46,14 +96,15 @@
   </main>
   
   <footer>
-    &copy;<%= new Date().getFullYear() %> Anthony Colon. All rights
+    <p>&copy; 2025 Anthony Colon. All rights reserved.</p>
   </footer>
 
   <script>
     // Store route data for the map script
     const routeData = <%- JSON.stringify(routeData) %>;
     const originAddress = '<%= origin %>';
-    const destinationAddress = '<%= destination %>';
+    const destinationsArray = <%- destinations %>;
+    const isMultiDestination = <%= isMultiDestination %>;
   </script>
   <script src="/js/resultMapHandler.js"></script>
 </body>

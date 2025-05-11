@@ -28,6 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
       removeButton.addEventListener("click", () => {
         destinationsContainer.removeChild(newDestinationDiv);
+
+        // Update the destination numbers
+        updateDestinationLabels();
       });
 
       // Add Google Places autocomplete to the new input
@@ -38,6 +41,25 @@ document.addEventListener("DOMContentLoaded", () => {
           new google.maps.places.Autocomplete(input);
         }
       }, 100);
+    });
+  }
+
+  // Function to update destination labels after removal
+  function updateDestinationLabels() {
+    const destinationGroups = document.querySelectorAll(
+      "#destinations-container .form-group"
+    );
+    destinationGroups.forEach((group, index) => {
+      const label = group.querySelector("label");
+      if (label) {
+        label.textContent = `Destination ${index + 2}:`;
+        label.setAttribute("for", `destination${index + 2}`);
+      }
+
+      const input = group.querySelector("input");
+      if (input) {
+        input.id = `destination${index + 2}`;
+      }
     });
   }
 });

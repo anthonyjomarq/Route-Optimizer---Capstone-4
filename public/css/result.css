@@ -55,3 +55,76 @@
 .direction-step p:first-child {
   margin-bottom: 0.3rem;
 }
+
+/* Styles for multi-destination routes */
+.leg-container {
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px dashed #ccc;
+}
+
+.leg-container:last-child {
+  border-bottom: none;
+}
+
+.leg-container h3 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #007bff;
+  background-color: #f8f9fa;
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+#stop-order {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 4px;
+  margin-bottom: 2rem;
+}
+
+#stop-order li {
+  margin-bottom: 0.5rem;
+}
+
+#stop-order li:first-child {
+  font-weight: bold;
+  color: #28a745;
+}
+
+#stop-order li:last-child {
+  font-weight: bold;
+  color: #dc3545;
+}
+
+/* Map marker legend styles */
+.map-legend {
+  background-color: #f8f9fa;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.marker-label {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #333;
+  margin: 0 3px;
+  font-weight: bold;
+}
+
+.marker-label:first-of-type {
+  background-color: #28a745;
+  color: #fff;
+}
+
+.marker-label:last-of-type {
+  background-color: #dc3545;
+  color: #fff;
+}
