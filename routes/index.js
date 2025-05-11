@@ -1,4 +1,3 @@
-// routes/index.js
 import express from "express";
 import * as indexController from "../controllers/indexController.js";
 import * as routeController from "../controllers/routeController.js";
@@ -15,5 +14,8 @@ router.get("/", indexController.displayHomePage);
 
 // Route calculation route with validation middleware
 router.post("/route", validateRouteInput, routeController.calculateRoute);
+
+// Shared route handler
+router.get("/shared-route", routeController.displaySharedRoute);
 
 export default router;

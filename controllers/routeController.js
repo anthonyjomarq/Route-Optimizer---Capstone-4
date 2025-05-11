@@ -74,3 +74,37 @@ export const calculateRoute = async (req, res) => {
     });
   }
 };
+
+export const displaySharedRoute = (req, res) => {
+  try {
+    const origin = req.query.origin;
+    const destinations = Array.isArray(req.query.dest)
+      ? req.query.dest
+      : [req.query.dest];
+
+    if (!origin || !destinations || destinations.length === 0) {
+      throw new Error("Missing route parameters");
+    }
+
+    logger.info(
+      `Loading shared route: Origin=${origin}, Destinations=${destinations.join(
+        ", "
+      )}`
+    );
+
+    res.render("shared-route", {
+      title: "Shared Route",
+      provider: "Google Maps",
+      apiKey: config.api.key,
+      origin,
+      destinations,
+    });
+  } catch (error) {
+    logger.error(`Shared route error: ${error.message}`);
+    res.render("error", {
+      title: "Error",
+      error: "Unable to load shared route. " + error.message,
+      stack: process.env.NODE_ENV === "development" ? error.stack : null,
+    });
+  }
+};

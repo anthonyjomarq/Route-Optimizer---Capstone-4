@@ -1,111 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/result.css">
-  <script src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&v=weekly" defer></script>
-</head>
-<body>
-  <header>
-    <h1>Optimized Delivery Route</h1>
-  </header>
-  
-  <main>
-    <section class="map-container">
-      <div id="map"></div>
-    </section>
-    
-    <section class="route-details">
-      <h2>Route Summary</h2>
-      <div id="route-summary">
-      <% if (routeData.startAddress === routeData.endAddress) { %>
-        <p><strong>Circular Route:</strong> Starting and returning to <%= routeData.startAddress %></p>
-      <% } else { %>
-        <p><strong>From:</strong> <%= routeData.startAddress %></p>
-        <p><strong>To:</strong> <%= routeData.endAddress %></p>
-      <% } %>
-      
-      <% if (isMultiDestination) { %>
-        <p><strong>Total Distance:</strong> <%= routeData.totalDistance %></p>
-        <p><strong>Total Time:</strong> <%= routeData.totalDuration %></p>
-        <p><strong>Stops:</strong> <%= routeData.legs.length - 1 %></p>
-      <% } else { %>
-        <p><strong>Distance:</strong> <%= routeData.distance %></p>
-        <p><strong>Estimated Time:</strong> <%= routeData.duration %></p>
-      <% } %>
-    </div>
-  
-  <div class="map-legend">
-    <p><strong>Map Markers:</strong> <span class="marker-label">S</span> = Starting Point, 
-      <span class="marker-label">E</span> = End Point</p>
-  </div>
-      
-      <% if (isMultiDestination) { %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/css/main.css" />
+    <link rel="stylesheet" href="/css/result.css" />
+    <script
+      src="https://maps.googleapis.com/maps/api/js?key=<%= apiKey %>&v=weekly"
+      defer
+    ></script>
+  </head>
+  <body>
+    <header>
+      <h1>Optimized Delivery Route</h1>
+    </header>
+
+      <nav class="main-nav">
+      <div class="nav-container">
+        <a href="/" class="nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L8 2.207l6.646 6.647a.5.5 0 0 0 .708-.708L13 2.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5Z"/>
+            <path d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6Z"/>
+          </svg>
+          Home
+        </a>
+        <a href="https://github.com/anthonyjomarq/route-optimizer" target="_blank" class="nav-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+
+
+    <main>
+      <section class="map-container">
+        <div id="map"></div>
+      </section>
+
+      <section class="route-details">
+        <h2>Route Summary</h2>
+        <div id="route-summary">
+          <% if (routeData.startAddress === routeData.endAddress) { %>
+          <p>
+            <strong>Circular Route:</strong> Starting and returning to <%=
+            routeData.startAddress %>
+          </p>
+          <% } else { %>
+          <p><strong>From:</strong> <%= routeData.startAddress %></p>
+          <p><strong>To:</strong> <%= routeData.endAddress %></p>
+          <% } %> <% if (isMultiDestination) { %>
+          <p><strong>Total Distance:</strong> <%= routeData.totalDistance %></p>
+          <p><strong>Total Time:</strong> <%= routeData.totalDuration %></p>
+          <p><strong>Stops:</strong> <%= routeData.legs.length - 1 %></p>
+          <% } else { %>
+          <p><strong>Distance:</strong> <%= routeData.distance %></p>
+          <p><strong>Estimated Time:</strong> <%= routeData.duration %></p>
+          <% } %>
+        </div>
+
+        <div class="action-buttons">
+          <button id="print-route" class="action-btn print-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M2.5 8a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z" />
+              <path
+                d="M5 1a2 2 0 0 0-2 2v2H2a2 2 0 0 0-2 2v3a2 2 0 0 0 2 2h1v1a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-1h1a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-1V3a2 2 0 0 0-2-2H5zM4 3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2H4V3zm1 5a2 2 0 0 0-2 2v1H2a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-1v-1a2 2 0 0 0-2-2H5zm7 2v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1z"
+              />
+            </svg>
+            Print Route
+          </button>
+          <button id="share-route" class="action-btn share-btn">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"
+              />
+            </svg>
+            Share Route
+          </button>
+        </div>
+
+        <div class="map-legend">
+          <p>
+            <strong>Map Markers:</strong> <span class="marker-label">S</span> =
+            Starting Point, <span class="marker-label">E</span> = End Point
+          </p>
+        </div>
+
+        <% if (isMultiDestination) { %>
         <h2>Stop Order</h2>
         <ol id="stop-order">
           <li><%= routeData.startAddress %> (Start)</li>
           <% for (let i = 0; i < routeData.legs.length - 1; i++) { %>
-            <li><%= routeData.legs[i].endAddress %></li>
+          <li><%= routeData.legs[i].endAddress %></li>
           <% } %>
           <li><%= routeData.endAddress %> (End)</li>
         </ol>
-      <% } %>
-      
-      <h2>Step-by-Step Directions</h2>
-      <div id="route-directions">
-        <% if (isMultiDestination) { %>
-          <% routeData.legs.forEach((leg, legIndex) => { %>
-            <div class="leg-container">
-              <h3>
-                Leg <%= legIndex + 1 %>: 
-                <%= leg.startAddress.split(',')[0] %> to 
-                <%= leg.endAddress.split(',')[0] %>
-                (<%= leg.distance %>, <%= leg.duration %>)
-              </h3>
-              <ol>
-                <% leg.steps.forEach((step) => { %>
-                  <li>
-                    <div class="direction-step">
-                      <p><%- step.instructions %></p>
-                      <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
-                    </div>
-                  </li>
-                <% }); %>
-              </ol>
-            </div>
-          <% }); %>
-        <% } else { %>
-          <ol>
-            <% routeData.steps.forEach(function(step) { %>
+        <% } %>
+
+        <h2>Step-by-Step Directions</h2>
+        <div id="route-directions">
+          <% if (isMultiDestination) { %> <% routeData.legs.forEach((leg,
+          legIndex) => { %>
+          <div class="leg-container">
+            <h3>
+              Leg <%= legIndex + 1 %>: <%= leg.startAddress.split(',')[0] %> to
+              <%= leg.endAddress.split(',')[0] %> (<%= leg.distance %>, <%=
+              leg.duration %>)
+            </h3>
+            <ol>
+              <% leg.steps.forEach((step) => { %>
               <li>
                 <div class="direction-step">
                   <p><%- step.instructions %></p>
-                  <p class="step-distance"><%= step.distance %> (<%= step.duration %>)</p>
+                  <p class="step-distance">
+                    <%= step.distance %> (<%= step.duration %>)
+                  </p>
                 </div>
               </li>
+              <% }); %>
+            </ol>
+          </div>
+          <% }); %> <% } else { %>
+          <ol>
+            <% routeData.steps.forEach(function(step) { %>
+            <li>
+              <div class="direction-step">
+                <p><%- step.instructions %></p>
+                <p class="step-distance">
+                  <%= step.distance %> (<%= step.duration %>)
+                </p>
+              </div>
+            </li>
             <% }); %>
           </ol>
-        <% } %>
-      </div>
-    </section>
-    
-    <a href="/" class="back-button">Calculate Another Route</a>
-  </main>
-  
-  <footer>
-    <p>&copy; 2025 Anthony Colon. All rights reserved.</p>
-  </footer>
+          <% } %>
+        </div>
+      </section>
 
-  <script>
-    // Store route data for the map script
-    const routeData = <%- JSON.stringify(routeData) %>;
-    const originAddress = '<%= origin %>';
-    const destinationsArray = <%- destinations %>;
-    const isMultiDestination = <%= isMultiDestination %>;
-  </script>
-  <script src="/js/resultMapHandler.js"></script>
-</body>
+      <a href="/" class="back-button">Calculate Another Route</a>
+    </main>
+
+    <footer>
+      <p>&copy; 2025 Anthony Colon. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/routeHistory.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        console.log('Saving route to history'); 
+        // Save this route to history
+        const routeHistory = new RouteHistoryManager();
+        
+        let destArray;
+        try {
+          destArray = <%- destinations %>;
+        } catch(e) {
+          console.error('Error parsing destinations:', e);
+          destArray = ['<%= destination %>'];
+        }
+        
+        routeHistory.saveRoute('<%= origin %>', destArray);
+      });
+    </script>
+
+    <script>
+      // Store route data for the map script
+      const routeData = <%- JSON.stringify(routeData) %>;
+      const originAddress = '<%= origin %>';
+      const destinationsArray = <%- destinations %>;
+      const isMultiDestination = <%= isMultiDestination %>;
+    </script>
+    <script src="/js/resultMapHandler.js"></script>
+    <script src="/js/shareTools.js"></script>
+  </body>
 </html>

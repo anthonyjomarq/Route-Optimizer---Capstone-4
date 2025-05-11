@@ -1,3 +1,12 @@
+// Set default origin address when page loads
+document.addEventListener("DOMContentLoaded", function () {
+  const originInput = document.getElementById("origin");
+  if (originInput && !originInput.value) {
+    originInput.value =
+      "Dynamics Payments, 3100 Carr 199, Ste 101, San Juan, 00926";
+  }
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const addDestinationButton = document.getElementById("add-destination");
   const destinationsContainer = document.getElementById(
@@ -69,5 +78,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Update destinationCount to reflect actual number of fields
     destinationCount = destinationInputs.length + 1; // +1 for the first destination
+  }
+
+  // Form submit handler to show loading spinner
+  const routeForm = document.querySelector("form");
+  if (routeForm) {
+    routeForm.addEventListener("submit", (e) => {
+      // Show the loading spinner
+      const spinner = document.getElementById("loading-spinner");
+      if (spinner) {
+        spinner.style.display = "flex";
+      }
+    });
   }
 });
